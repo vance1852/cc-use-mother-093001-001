@@ -33,3 +33,28 @@ class ConflictError(DomainError):
 
     code = "conflict"
     status = 409
+
+
+class WindowClosedError(DomainError):
+    """报名窗口已经关闭，写入不再允许。"""
+
+    code = "window_closed"
+    status = 422
+
+
+class FrozenError(DomainError):
+    """作品已在截止时冻结，不能再改动。"""
+
+    code = "frozen"
+    status = 422
+
+
+class DuplicateQualificationError(DomainError):
+    """同一受益创作主体借关联身份重复占用互斥资格。"""
+
+    code = "duplicate_qualification"
+    status = 409
+
+    def __init__(self, message: str, detail: dict | None = None) -> None:
+        super().__init__(message)
+        self.detail = detail or {}
