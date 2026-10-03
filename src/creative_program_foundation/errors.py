@@ -33,3 +33,31 @@ class ConflictError(DomainError):
 
     code = "conflict"
     status = 409
+
+
+class WindowClosedError(ConflictError):
+    """报名或补正窗口已关闭，材料只能走申诉。"""
+
+    code = "window_closed"
+
+
+class QuotaExhaustedError(ConflictError):
+    """目标赛道名额已满。"""
+
+    code = "quota_exhausted"
+
+
+class EligibilityConflictError(ConflictError):
+    """同一受益创作主体通过关联身份占用互斥资格。"""
+
+    code = "eligibility_conflict"
+
+    def __init__(self, message: str, conflicts: list | None = None) -> None:
+        super().__init__(message)
+        self.conflicts = conflicts or []
+
+
+class FrozenWindowError(ConflictError):
+    """窗口已经原子冻结，原申请不可再被改写。"""
+
+    code = "window_frozen"
